@@ -2,19 +2,23 @@ async function initWorkout() {
   const lastWorkout = await API.getLastWorkout();
   console.log("Last workout:", lastWorkout);
   console.log('lastworkoutexercises', lastWorkout.exercises);
-  let duration;
-  let weight;
-  let sets;
-  let reps;
+  let duration = 0;
+  let weight = 0;
+  let sets = 0;
+  let reps = 0;
+  let distance = 0;
   lastWorkout.exercises.forEach(el=>{
-    console.log('el in loop ', el);
-    duration = el.duration + duration;
-    weight += el.weight;
+    duration = parseInt(el.duration + duration);
+    weight = parseInt(el.weight + weight);
     reps += el.reps;
     sets += el.sets;
   });
-  console.log('duration', duration);
   lastWorkout.totalDuration = duration;
+  lastWorkout.totalWeight = weight;
+  lastWorkout.totalSets = sets;
+  lastWorkout.totalReps = reps;
+  lastWorkout.totalDistance = distance;
+
   console.log('lastworkout', lastWorkout);
   if (lastWorkout) {
     document
