@@ -2,24 +2,6 @@ async function initWorkout() {
   const lastWorkout = await API.getLastWorkout();
   console.log("Last workout:", lastWorkout);
   console.log('lastworkoutexercises', lastWorkout.exercises);
-  let duration = 0;
-  let weight = 0;
-  let sets = 0;
-  let reps = 0;
-  let distance = 0;
-  lastWorkout.exercises.forEach(el=>{
-    duration = parseInt(el.duration + duration);
-    weight = parseInt(el.weight + weight);
-    console.log('weight in loop', weight);
-    console.log('el.weight in loop ', el.weight);
-    reps += el.reps;
-    sets += el.sets;
-  });
-  lastWorkout.totalDuration = duration;
-  lastWorkout.totalWeight = weight;
-  lastWorkout.totalSets = sets;
-  lastWorkout.totalReps = reps;
-  lastWorkout.totalDistance = distance;
 
   console.log('lastworkout', lastWorkout);
   if (lastWorkout) {
@@ -41,12 +23,15 @@ async function initWorkout() {
 }
 
 function tallyExercises(exercises) {
+  console.log('exercises in tally ', exercises);
   const tallied = exercises.reduce((acc, curr) => {
     if (curr.type === "resistance") {
       acc.totalWeight = (acc.totalWeight || 0) + curr.weight;
       acc.totalSets = (acc.totalSets || 0) + curr.sets;
       acc.totalReps = (acc.totalReps || 0) + curr.reps;
+      acc.totalDuration = (acc.totalDuration || 0) + curr.duration;
     } else if (curr.type === "cardio") {
+      acc.totalDuration = (acc.totalDuration || 0) + curr.duration;
       acc.totalDistance = (acc.totalDistance || 0) + curr.distance;
     }
     return acc;
