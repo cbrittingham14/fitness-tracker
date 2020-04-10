@@ -10,6 +10,8 @@ async function initWorkout() {
   lastWorkout.exercises.forEach(el=>{
     duration = parseInt(el.duration + duration);
     weight = parseInt(el.weight + weight);
+    console.log('weight in loop', weight);
+    console.log('el.weight in loop ', el.weight);
     reps += el.reps;
     sets += el.sets;
   });
