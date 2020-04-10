@@ -7,7 +7,7 @@ const API = {
       console.log(err)
     }
     const json = await res.json();
-
+    console.log('json in api ', json); // console log
     return json[json.length - 1];
   },
   async addExercise(data) {
