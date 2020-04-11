@@ -41,7 +41,19 @@ app.get('/exercise', (req,res)=>{
 //route to create a workout
 app.post('/api/workouts', (req, res)=>{
 	console.log('req.body in api/workouts post ',req.body);
-	res.json('hello');
+	if(req.body.length > 0){
+		let wo = new db.Workout({ date: Date.Now ,exercises: req.body });
+		db.Workout.create(wo, (err, data=>{
+			if(err){
+				console.log(err);
+			}
+			console.log(data);
+			res.json(wo);
+		}));
+	} else{
+		res.json('hjya');
+	}
+	
 });
 
 //route to add exercise to workout
@@ -56,5 +68,4 @@ app.put('/api/workouts/:id', (req,res)=>{
 			res.json(data);
 		}
 	});
-	// res.json(data);
 });
