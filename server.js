@@ -23,20 +23,27 @@ app.listen(PORT, () => {
 
 //base path
 app.get('/', (req,res)=>{
-	res.sendFile(path.join(__dirname, "./public/index.html"));
+	res.sendFile(path.join(__dirname, './public/index.html'));
 });
 
 //route to get all workouts, which renders the most recent due to front end logic
 app.get('/api/workouts', (req, res)=> {
 	db.Workout.find({}, (err, data)=>{
+		if(err){
+			return res.json(err);
+		}
 		return res.json(data);
 	});	
 });
 
 // route to return exercise.html
 app.get('/exercise', (req,res)=>{
-    res.sendFile(path.join(__dirname, "./public/exercise.html"));
+    res.sendFile(path.join(__dirname, './public/exercise.html'));
 });
+
+app.get('/stats', (req,res)=>{
+	res.sendFile(path.join(__dirname, './public/stats.html'));
+})
 
 //route to add exercise to workout
 app.put('/api/workouts/:id', (req,res)=>{
@@ -66,4 +73,11 @@ app.post('/api/workouts', (req, res)=>{
 		}
 		return res.json(data);
 	});
+});
+
+//allworkouts in range route
+app.get('/api/workouts/range', (req, res)=>{
+	db.Workout.find({}).sort({ day:-1 })
+	.then(data=> res.json(data))
+	.catch(err=> res.json(err));
 });
