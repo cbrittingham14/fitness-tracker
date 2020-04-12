@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const logger = require('morgan');
 const path = require("path");
 const db = require('./models');
-
+// const seeder = require('./seeders/seed');
 
 const PORT = process.env.PORT || 8080;
 
@@ -29,8 +29,7 @@ app.get('/', (req,res)=>{
 //route to get all workouts, which renders the most recent due to front end logic
 app.get('/api/workouts', (req, res)=> {
 	db.Workout.find({}, (err, data)=>{
-		console.log('datalog ', data[data.length-1]);
-		res.json(data);
+		return res.json(data);
 	});	
 });
 
@@ -38,34 +37,33 @@ app.get('/api/workouts', (req, res)=> {
 app.get('/exercise', (req,res)=>{
     res.sendFile(path.join(__dirname, "./public/exercise.html"));
 });
-//route to create a workout
-app.post('/api/workouts', (req, res)=>{
-	console.log('req.body in api/workouts post ',req.body);
-	if(req.body.length > 0){
-		let wo = new db.Workout({ date: Date.Now ,exercises: req.body });
-		db.Workout.create(wo, (err, data=>{
+
+//route to add exercise to workout
+app.put('/api/workouts/:id', (req,res)=>{
+	if(req.params.id){
+		db.Workout.updateOne({ _id: req.params.id },{$push: { exercises:req.body }}, (err,data)=>{
 			if(err){
-				console.log(err);
+				return res.json(err);
 			}
-			console.log(data);
-			res.json(wo);
-		}));
+			if(data){
+				return res.json(data);
+			}
+		});
 	} else{
-		res.json('hjya');
+		return res.json('Didnt update');
 	}
 	
 });
 
-//route to add exercise to workout
-app.put('/api/workouts/:id', (req,res)=>{
-	console.log('req.body in api/workouts with id ' , req.body)
-	db.Workout.updateOne({ _id: req.params.id },{$push: { exercises:req.body }}, (err,data)=>{
+//route to create a workout
+app.post('/api/workouts', (req, res)=>{
+		
+	let wo = new db.Workout();
+	db.Workout.create(wo, (err, data)=>{
 		if(err){
-			console.log('err ', err);
+			console.log(err);
+			return res.json(err);
 		}
-		if(data){
-			console.log('data ', data);
-			res.json(data);
-		}
+		return res.json(data);
 	});
 });
