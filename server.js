@@ -6,7 +6,7 @@ const db = require('./models');
 
 // uncomment line below to clear and reseed database
 
-const seeder = require('./seeders/seed');
+// const seeder = require('./seeders/seed');
 
 const PORT = process.env.PORT || 8080;
 
