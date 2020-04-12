@@ -3,6 +3,9 @@ const mongoose = require('mongoose');
 const logger = require('morgan');
 const path = require("path");
 const db = require('./models');
+
+// uncomment line below to clear and reseed database
+
 // const seeder = require('./seeders/seed');
 
 const PORT = process.env.PORT || 8080;
@@ -41,6 +44,7 @@ app.get('/exercise', (req,res)=>{
     res.sendFile(path.join(__dirname, './public/exercise.html'));
 });
 
+//stats route
 app.get('/stats', (req,res)=>{
 	res.sendFile(path.join(__dirname, './public/stats.html'));
 })
